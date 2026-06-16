@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CareerShield AI — Protect your job search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="site-header">
+      <div class="logo">CareerShield <span class="accent">AI</span></div>
+      <nav class="nav">
+        <button id="analyzeBtn" class="btn primary">Analyze Job</button>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner glass">
+        <h1 class="title">Protect your Career with AI-powered Scam Detection</h1>
+        <p class="subtitle">Spot red flags, evaluate opportunity risk, and get a clear recommendation — before you apply.</p>
+        <div class="cta-row">
+          <button id="heroAnalyze" class="btn large gradient">Analyze a Job</button>
+          <a class="btn ghost" href="#features">Learn more</a>
+        </div>
+      </div>
+      <div class="hero-accent"></div>
+    </section>
+
+    <section id="reportDashboard" class="dashboard hidden">
+      <div class="dashboard-panel glass">
+        <!-- SECTION 1: Result Summary (full-width) -->
+        <div class="summary-card">
+          <div class="recommendation-panel recommendation-safe">
+            <p class="eyebrow">Recommendation</p>
+            <h2 id="recommendationHeadline">Safe to Apply</h2>
+            <p id="explanationText" class="dashboard-copy">Your opportunity is strong based on AI analysis.</p>
+            <div style="margin-top:10px">
+              <button id="downloadReportBtn" class="btn ghost" type="button">Download Report</button>
+            </div>
+          </div>
+          <div class="score-grid">
+            <div class="score-cards">
+              <div class="metric-card large-card">
+                <span>Trust Score</span>
+                <strong id="trustScoreValue">0/100</strong>
+              </div>
+              <div class="metric-card large-card">
+                <span>Scam Risk Score</span>
+                <strong id="scamRiskScoreValue">0/100</strong>
+              </div>
+              <div class="metric-card large-card">
+                <span>Resume Match</span>
+                <strong id="resumeMatchValue">0.00%</strong>
+              </div>
+              <div class="metric-card large-card">
+                <span>Opportunity Score</span>
+                <strong id="opportunityScoreValue">0.00/100</strong>
+              </div>
+            </div>
+            <div class="risk-bar-card compact-risk-card">
+              <span>Risk Indicator</span>
+              <div class="risk-bar">
+                <div id="riskFill" class="risk-fill"></div>
+              </div>
+              <div class="risk-labels">
+                <span>Safe</span><span>Caution</span><span>Avoid</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: AI Explanation (advisor + improve) -->
+        <div class="advice-card">
+          <div class="advisor-card">
+            <h3>AI Career Advisor</h3>
+            <p id="advisorText" class="result-text">This advice will help you act on the analysis.</p>
+          </div>
+          <div class="improve-card">
+            <h3>How to Improve Your Chances</h3>
+            <div id="improveText" class="result-text">Recommendations based on resume quality and skill gaps are shown here.</div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Red Flags (full-width grid) -->
+        <div class="flags-card">
+          <h3 class="section-heading">Red Flags (<span id="redFlagCount">0</span>)</h3>
+          <div id="redFlagsContainer" class="flag-grid"></div>
+          <button id="viewAllFlagsButton" class="btn ghost view-all-flags-btn hidden" type="button">View all red flags</button>
+        </div>
+
+        <!-- SECTION 5: Skills (only if present) -->
+        <div id="skillsSection" class="skills-section hidden">
+          <div id="matchingSkillsSection" class="skills-row">
+            <h4>Matching Skills</h4>
+            <div id="matchingSkills" class="badge-row"></div>
+          </div>
+          <div id="missingSkillsSection" class="skills-row">
+            <h4>Missing Skills</h4>
+            <div id="missingSkills" class="badge-row"></div>
+          </div>
+        </div>
+        <div id="skillsFallback" class="hidden"><p class="result-text">No skills extracted from this opportunity.</p></div>
+      </div>
+    </section>
+
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop" id="backdrop"></div>
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button id="closeModal" class="modal-close" aria-label="Close modal">×</button>
+        <div class="modal-body">
+          <h2 id="modalTitle">Analyze a Job</h2>
+          <form id="analyzeForm">
+            <label>Job Text<textarea name="job_text" rows="4" placeholder="Paste job posting text"></textarea></label>
+            <label>Recruiter Message<textarea name="recruiter_message" rows="3" placeholder="Recruiter message (optional)"></textarea></label>
+            <label>Email<input name="email" type="email" placeholder="recruiter@example.com"/></label>
+            <label>Salary<input name="salary" type="text" placeholder="$60,000"/></label>
+            <label>Resume Text<textarea name="resume_text" rows="4" placeholder="Paste your resume text (optional)"></textarea></label>
+            <div class="form-actions">
+              <button type="submit" class="btn gradient">Run Analysis</button>
+              <button type="button" id="cancelBtn" class="btn ghost">Cancel</button>
+            </div>
+          </form>
+          <div id="validationMessage" class="validation-message" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <section id="features" class="features">
+      <h2 class="section-title">How CareerShield works</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Scam detection</h3>
+          <p>Find risky patterns in job posts and recruiter messages.</p>
+        </div>
+        <div class="card">
+          <h3>Resume matching</h3>
+          <p>Compare your experience to the opportunity and identify gaps.</p>
+        </div>
+        <div class="card">
+          <h3>Clear recommendation</h3>
+          <p>Get an easy-to-read verdict so you can decide faster.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
