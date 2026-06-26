@@ -1,0 +1,82 @@
+{
+    "project": "CareerShield AI",
+    "model_version": "v1.0",
+    "best_model": "Logistic Regression",
+    "model_type": "Text Classification",
+    "task": "Recruitment Scam Detection",
+    "vectorizer": "TF-IDF",
+    "selection_metric": "Validation F1, then validation recall, then validation accuracy",
+    "dataset_size": 95,
+    "class_distribution": {
+        "genuine": 50,
+        "scam": 45
+    },
+    "cross_validation": {
+        "strategy": "StratifiedKFold",
+        "folds": 5,
+        "shuffle": true,
+        "random_state": 42
+    },
+    "deployed_model_metrics": {
+        "train_f1": 1.0,
+        "validation_accuracy": 0.9684,
+        "validation_precision": 0.98,
+        "validation_recall": 0.9556,
+        "validation_f1": 0.9659,
+        "overfit_gap_train_f1_minus_val_f1": 0.0341
+    },
+    "all_model_results": {
+        "Logistic Regression": {
+            "train_f1": 1.0,
+            "validation_accuracy": 0.9684,
+            "validation_precision": 0.98,
+            "validation_recall": 0.9556,
+            "validation_f1": 0.9659,
+            "overfit_gap_train_f1_minus_val_f1": 0.0341
+        },
+        "Naive Bayes": {
+            "train_f1": 1.0,
+            "validation_accuracy": 0.9684,
+            "validation_precision": 0.98,
+            "validation_recall": 0.9556,
+            "validation_f1": 0.9659,
+            "overfit_gap_train_f1_minus_val_f1": 0.0341
+        },
+        "Linear SVM": {
+            "train_f1": 1.0,
+            "validation_accuracy": 0.9684,
+            "validation_precision": 1.0,
+            "validation_recall": 0.9333,
+            "validation_f1": 0.9647,
+            "overfit_gap_train_f1_minus_val_f1": 0.0353
+        },
+        "Random Forest": {
+            "train_f1": 1.0,
+            "validation_accuracy": 0.9368,
+            "validation_precision": 0.8873,
+            "validation_recall": 1.0,
+            "validation_f1": 0.9389,
+            "overfit_gap_train_f1_minus_val_f1": 0.0611
+        },
+        "Gradient Boosting": {
+            "train_f1": 1.0,
+            "validation_accuracy": 0.9474,
+            "validation_precision": 0.94,
+            "validation_recall": 0.9556,
+            "validation_f1": 0.9449,
+            "overfit_gap_train_f1_minus_val_f1": 0.0551
+        }
+    },
+    "training_environment": {
+        "python_version": "3.14.3",
+        "sklearn_version": "1.9.0"
+    },
+    "training_date": "2026-06-26 15:47:56",
+    "notes": [
+        "Cross-validation is used to reduce dependence on one random train-test split.",
+        "Overfit gap compares training F1 and validation F1.",
+        "For scam detection, recall and F1 are prioritized over accuracy.",
+        "The saved model.pkl contains the full TF-IDF + classifier pipeline.",
+        "This is a baseline supervised ML classifier and can be improved with larger real-world datasets."
+    ]
+}

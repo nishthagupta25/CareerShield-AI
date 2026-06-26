@@ -1,0 +1,168 @@
+{
+    "available": true,
+    "method": "TF-IDF coefficient analysis",
+    "top_scam_indicators": [
+        {
+            "term": "asks",
+            "weight": 0.9414
+        },
+        {
+            "term": "job",
+            "weight": 0.8739
+        },
+        {
+            "term": "pay",
+            "weight": 0.8041
+        },
+        {
+            "term": "offer",
+            "weight": 0.5706
+        },
+        {
+            "term": "whatsapp",
+            "weight": 0.476
+        },
+        {
+            "term": "fake",
+            "weight": 0.4744
+        },
+        {
+            "term": "joining",
+            "weight": 0.4603
+        },
+        {
+            "term": "recruiter",
+            "weight": 0.4592
+        },
+        {
+            "term": "work",
+            "weight": 0.4574
+        },
+        {
+            "term": "guaranteed",
+            "weight": 0.4522
+        },
+        {
+            "term": "payment",
+            "weight": 0.4473
+        },
+        {
+            "term": "high",
+            "weight": 0.4341
+        },
+        {
+            "term": "urgent",
+            "weight": 0.4287
+        },
+        {
+            "term": "fee",
+            "weight": 0.4108
+        },
+        {
+            "term": "mandatory",
+            "weight": 0.4093
+        },
+        {
+            "term": "promises",
+            "weight": 0.3495
+        },
+        {
+            "term": "refundable",
+            "weight": 0.3451
+        },
+        {
+            "term": "processing",
+            "weight": 0.3433
+        },
+        {
+            "term": "earn",
+            "weight": 0.337
+        },
+        {
+            "term": "paying",
+            "weight": 0.334
+        }
+    ],
+    "top_genuine_indicators": [
+        {
+            "term": "intern",
+            "weight": -0.9936
+        },
+        {
+            "term": "official",
+            "weight": -0.7671
+        },
+        {
+            "term": "python",
+            "weight": -0.5764
+        },
+        {
+            "term": "apply",
+            "weight": -0.5752
+        },
+        {
+            "term": "requiring",
+            "weight": -0.532
+        },
+        {
+            "term": "skills",
+            "weight": -0.4818
+        },
+        {
+            "term": "clear",
+            "weight": -0.4727
+        },
+        {
+            "term": "linux",
+            "weight": -0.4335
+        },
+        {
+            "term": "apis",
+            "weight": -0.4012
+        },
+        {
+            "term": "excel",
+            "weight": -0.3852
+        },
+        {
+            "term": "role",
+            "weight": -0.3739
+        },
+        {
+            "term": "sql",
+            "weight": -0.3683
+        },
+        {
+            "term": "page",
+            "weight": -0.3672
+        },
+        {
+            "term": "git",
+            "weight": -0.3615
+        },
+        {
+            "term": "learning",
+            "weight": -0.3588
+        },
+        {
+            "term": "basics",
+            "weight": -0.3563
+        },
+        {
+            "term": "requires",
+            "weight": -0.347
+        },
+        {
+            "term": "internship requires",
+            "weight": -0.347
+        },
+        {
+            "term": "process",
+            "weight": -0.3418
+        },
+        {
+            "term": "data",
+            "weight": -0.3366
+        }
+    ]
+}
