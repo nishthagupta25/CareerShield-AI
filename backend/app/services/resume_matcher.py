@@ -23,38 +23,33 @@ def _simple_tokenize(text: str) -> List[str]:
 
 
 def calculate_resume_match(resume_text: str, job_text: str) -> float:
-    """Return a similarity score between 0 and 100.
-
-    Primary approach: use scikit-learn TF-IDF when available. If scikit-learn
-    isn't installed, fall back to a simple term-frequency cosine similarity so
-    the service works without the dependency.
+    """
+    Calculates semantic resume-job similarity using Sentence Transformer embeddings.
+    Falls back to simple token cosine similarity if embedding model fails.
     """
     if not resume_text or not job_text:
         return 0.0
 
-    # Try to use scikit-learn if installed
     try:
-        from sklearn.feature_extraction.text import TfidfVectorizer
-        from sklearn.metrics.pairwise import cosine_similarity
+        from .semantic_engine import semantic_similarity
+        return semantic_similarity(resume_text, job_text)
 
-        vect = TfidfVectorizer(stop_words="english")
-        docs = [resume_text, job_text]
-        tfidf = vect.fit_transform(docs)
-        sim = cosine_similarity(tfidf[0:1], tfidf[1:2])[0][0]
-        score = float(sim * 100.0)
-        return round(score, 2)
     except Exception:
-        # fallback simple implementation
         toks_a = _simple_tokenize(resume_text)
         toks_b = _simple_tokenize(job_text)
+
         if not toks_a or not toks_b:
             return 0.0
+
         freq_a = {}
         freq_b = {}
+
         for t in toks_a:
             freq_a[t] = freq_a.get(t, 0) + 1
+
         for t in toks_b:
             freq_b[t] = freq_b.get(t, 0) + 1
+
         sim = _cosine_sim_from_counts(freq_a, freq_b)
         return round(float(sim * 100.0), 2)
 
