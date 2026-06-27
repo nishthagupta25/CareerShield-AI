@@ -8,13 +8,22 @@ def get_safety_label(scam_score: float) -> str:
         return "Needs Verification"
     return "Looks Safe"
 
-
 def generate_career_verdict(
     recommendation: str,
     scam_score: float,
     red_flags: List[Dict],
     ml_prediction: str,
 ) -> str:
+    if recommendation == "Insufficient Data":
+        return (
+            "Insufficient Data: Please provide a complete job description before relying on this analysis."
+        )
+
+    if recommendation == "Needs Resume Review":
+        return (
+            "Needs Resume Review: The job appears suitable for safety analysis, but the resume text is not detailed enough to judge your fit."
+        )
+
     safety = get_safety_label(scam_score)
 
     if recommendation == "Avoid":
@@ -24,14 +33,14 @@ def generate_career_verdict(
         )
 
     if recommendation == "Apply with Caution":
-       return (
-        "Needs Verification: This opportunity has some risk signals. "
-        "Verify the company website, recruiter identity, and job details before applying."
-    )
+        return (
+            "Needs Verification: This opportunity has some risk signals. "
+            "Verify the company website, recruiter identity, and job details before applying."
+        )
 
     return (
         f"{safety}: This opportunity appears reasonably safe based on available information. "
-        f"Still verify the company website before sharing personal documents."
+        "Still verify the company website before sharing personal documents."
     )
 
 
@@ -40,12 +49,18 @@ def generate_recruiter_view(
     missing_skills: List[str],
     resume_match_score: float,
 ) -> str:
+    if resume_match_score == 0 and not matching_skills:
+        return (
+            "CareerShield could not evaluate your resume because it does not contain enough meaningful information. "
+            "Please add your skills, projects, education, and experience for a personalized analysis."
+        )
+
     if resume_match_score >= 75:
-        base = "From a recruiter’s perspective, your profile looks strongly aligned with this role."
+        base = "From a recruiter's perspective, your profile looks strongly aligned with this role."
     elif resume_match_score >= 50:
-        base = "From a recruiter’s perspective, your profile partially matches this role."
+        base = "From a recruiter's perspective, your profile partially matches this role."
     else:
-        base = "From a recruiter’s perspective, your profile needs stronger alignment with this role."
+        base = "From a recruiter's perspective, your profile needs stronger alignment with this role."
 
     if matching_skills:
         base += f" Your strongest matching skills are: {', '.join(matching_skills[:5])}."
@@ -55,6 +70,20 @@ def generate_recruiter_view(
 
     return base
 
+
+def generate_skill_roadmap(missing_skills: List[str]) -> List[str]:
+    if not missing_skills:
+        return [
+            "No major missing skills were detected. Focus on interview practice and project explanation."
+        ]
+
+    roadmap = []
+    for skill in missing_skills[:5]:
+        roadmap.append(
+            f"Strengthen {skill} and add proof through a project, internship, or resume bullet."
+        )
+
+    return roadmap
 
 def calculate_interview_readiness(
     resume_match_score: float,
@@ -67,17 +96,6 @@ def calculate_interview_readiness(
     score -= min(len(missing_skills) * 5, 25)
 
     return int(max(0, min(score, 100)))
-
-
-def generate_skill_roadmap(missing_skills: List[str]) -> List[str]:
-    if not missing_skills:
-        return ["Your current skill set aligns well with this role. Focus on interview practice and project explanation."]
-
-    roadmap = []
-    for skill in missing_skills[:5]:
-        roadmap.append(f"Learn or strengthen {skill} and add a small project or resume bullet around it.")
-
-    return roadmap
 
 
 def generate_interview_questions(job_skills: List[str]) -> List[str]:
@@ -102,11 +120,9 @@ def generate_interview_questions(job_skills: List[str]) -> List[str]:
             questions.append(question_bank[skill])
 
     if not questions:
-        questions = [
-            "Explain your most relevant project for this role.",
-            "What skills from your resume match this opportunity?",
-            "How would you prepare for this interview?",
-        ]
+      questions = [
+        "Add a detailed job description to generate role-specific interview questions."
+    ]
 
     return questions[:5]
 

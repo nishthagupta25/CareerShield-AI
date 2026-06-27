@@ -12,7 +12,7 @@
 <body>
   <main class="page">
     <header class="site-header">
-      <div class="logo">CareerShield <span class="accent">AI</span></div>
+      <div class="logo"> 🛡️ CareerShield <span class="accent">AI</span></div>
       <nav class="nav">
         <button id="analyzeBtn" class="btn primary">Analyze Job</button>
       </nav>
@@ -20,10 +20,15 @@
 
     <section class="hero">
       <div class="hero-inner glass">
-        <h1 class="title">Protect your Career with AI-powered Scam Detection</h1>
-        <p class="subtitle">Spot red flags, evaluate opportunity risk, and get a clear recommendation — before you apply.</p>
+        <h1 class="title">
+    <span>Know</span><br>
+    <span class="gradient-text">Before You Apply</span>
+</h1>
+        <p class="subtitle">
+AI-powered job verification, resume matching, and career insights—all before you hit Apply.
+</p>
         <div class="cta-row">
-          <button id="heroAnalyze" class="btn large gradient">Analyze a Job</button>
+          <button id="heroAnalyze" class="btn large gradient">Analyze Job</button>
           <a class="btn ghost" href="#features">Learn more</a>
         </div>
       </div>
@@ -103,24 +108,65 @@
             <div id="missingSkills" class="badge-row"></div>
           </div>
         </div>
-        <div id="skillsFallback" class="hidden"><p class="result-text">No skills extracted from this opportunity.</p></div>
-      </div>
-    </section>
+        <div id="skillsFallback" class="hidden">
+  <p class="result-text">No skills extracted from this opportunity.</p>
+</div>
+
+<div id="careerIntelligenceSection" class="career-intelligence-section hidden">
+  <h3>🤖 AI Career Intelligence</h3>
+
+  <div class="career-ai-card">
+    <h4>🛡 AI Career Verdict</h4>
+    <p id="aiCareerVerdict"></p>
+  </div>
+  <div class="career-ai-card">
+  <h4>🧠 Why AI Made This Decision</h4>
+  <ul id="aiWhySafeList"></ul>
+  <ul id="aiWhyAttentionList"></ul>
+  <p id="aiFinalSummary"></p>
+</div>
+
+  <div class="career-ai-card">
+    <h4>👀 Recruiter View</h4>
+    <p id="aiRecruiterView"></p>
+  </div>
+
+  <div class="career-ai-card">
+    <h4>🎯 Interview Readiness</h4>
+    <h2 id="interviewReadinessScore">0%</h2>
+  </div>
+
+  <div class="career-ai-card">
+    <h4>🚀 Skill Roadmap</h4>
+    <ul id="skillRoadmapList"></ul>
+  </div>
+
+  <div class="career-ai-card">
+    <h4>💼 Likely Interview Questions</h4>
+    <ul id="interviewQuestionsList"></ul>
+  </div>
+</div>
+
+</div>
+</section>
 
     <div id="modal" class="modal" aria-hidden="true">
       <div class="modal-backdrop" id="backdrop"></div>
       <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <button id="closeModal" class="modal-close" aria-label="Close modal">×</button>
         <div class="modal-body">
-          <h2 id="modalTitle">Analyze a Job</h2>
+          <h2 id="modalTitle">Analyze Job</h2>
           <form id="analyzeForm">
             <label>Job Text<textarea name="job_text" rows="4" placeholder="Paste job posting text"></textarea></label>
             <label>Recruiter Message<textarea name="recruiter_message" rows="3" placeholder="Recruiter message (optional)"></textarea></label>
-            <label>Email<input name="email" type="email" placeholder="recruiter@example.com"/></label>
-            <label>Salary<input name="salary" type="text" placeholder="$60,000"/></label>
+            <label>Email<input name="email" type="email" placeholder="recruiter@example.com (optional)"/></label>
+            <label>Salary<input name="salary" type="text" placeholder="$60,000 (optional)"/></label>
             <label>Resume Text<textarea name="resume_text" rows="4" placeholder="Paste your resume text (optional)"></textarea></label>
             <div class="form-actions">
-              <button type="submit" class="btn gradient">Run Analysis</button>
+              <button type="submit" id="runAnalysisBtn" class="btn gradient">
+  <span class="btn-text">Run Analysis</span>
+  <span class="btn-loader hidden"></span>
+</button>
               <button type="button" id="cancelBtn" class="btn ghost">Cancel</button>
             </div>
           </form>
@@ -130,24 +176,25 @@
     </div>
 
     <section id="features" class="features">
-      <h2 class="section-title">How CareerShield works</h2>
+      <h2 class="section-title">Why CareerShield?</h2>
       <div class="cards">
         <div class="card">
-          <h3>Scam detection</h3>
-          <p>Find risky patterns in job posts and recruiter messages.</p>
+          <h3>🛡️ AI Scam Detection</h3>
+          <p>Detect fake recruiters, payment scams, and suspicious job offers instantly.</p>
         </div>
         <div class="card">
-          <h3>Resume matching</h3>
-          <p>Compare your experience to the opportunity and identify gaps.</p>
+          <h3>🎯 Resume Intelligence</h3>
+          <p>Understand how well your profile matches the opportunity.</p>
         </div>
         <div class="card">
-          <h3>Clear recommendation</h3>
-          <p>Get an easy-to-read verdict so you can decide faster.</p>
+          <h3>🚀 Career Recommendation</h3>
+          <p>Get a personalized AI verdict before investing your time.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

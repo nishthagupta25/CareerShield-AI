@@ -1,4 +1,5 @@
-﻿const analyzeBtn = document.getElementById('analyzeBtn')
+﻿let latestAnalysisResult = null
+const analyzeBtn = document.getElementById('analyzeBtn')
 const heroAnalyze = document.getElementById('heroAnalyze')
 const modal = document.getElementById('modal')
 const closeModalBtn = document.getElementById('closeModal')
@@ -27,6 +28,7 @@ const advisorText = document.getElementById('advisorText')
 const improveText = document.getElementById('improveText')
 const recommendationPanel = document.querySelector('.recommendation-panel')
 const redFlagCount = document.getElementById('redFlagCount')
+const runAnalysisBtn = document.getElementById('runAnalysisBtn')
 
 function openModal(source) {
   if (!modal) {
@@ -47,14 +49,25 @@ function closeModal(clearForm = false) {
   document.body.classList.remove('modal-open')
 }
 
-function mapRecommendationSummary(recommendation) {
-  const text = String(recommendation || '').toLowerCase()
+function mapRecommendationSummary(result) {
+  if (result.recommendation === 'Insufficient Data') {
+    return 'Please provide complete job and resume details to generate meaningful insights.'
+  }
+
+  if (result.recommendation === 'Needs Resume Review') {
+    return 'Job safety was checked, but your resume needs more meaningful information.'
+  }
+
+  const text = String(result.recommendation || '').toLowerCase()
+
   if (text.includes('avoid')) {
     return 'High scam risk detected. Review red flags before taking action.'
   }
+
   if (text.includes('caution')) {
     return 'Some concerns found. Verify the opportunity before applying.'
   }
+
   return 'No major warning signs detected.'
 }
 
@@ -114,6 +127,10 @@ function renderBadges(container, items) {
 }
 
 function resetDashboardState() {
+  if (runAnalysisBtn) {
+  runAnalysisBtn.disabled = true
+  runAnalysisBtn.classList.add('loading')
+}
   if (validationMessage) validationMessage.hidden = true
   if (recommendationHeadline) recommendationHeadline.textContent = 'Safe to Apply'
   if (explanationText) explanationText.textContent = 'No major warning signs detected.'
@@ -134,9 +151,18 @@ function resetDashboardState() {
 
 function updateRecommendationPanel(result) {
   const recommendationText = String(result.recommendation || '').toLowerCase()
+
   if (recommendationPanel) {
-    recommendationPanel.classList.remove('recommendation-safe', 'recommendation-caution', 'recommendation-avoid')
-    if (recommendationText.includes('avoid')) {
+    recommendationPanel.classList.remove(
+      'recommendation-safe',
+      'recommendation-caution',
+      'recommendation-avoid',
+      'recommendation-neutral'
+    )
+
+    if (recommendationText.includes('insufficient') || recommendationText.includes('resume review')) {
+      recommendationPanel.classList.add('recommendation-neutral')
+    } else if (recommendationText.includes('avoid')) {
       recommendationPanel.classList.add('recommendation-avoid')
     } else if (recommendationText.includes('caution')) {
       recommendationPanel.classList.add('recommendation-caution')
@@ -151,8 +177,12 @@ function updateScores(result) {
   if (scamRiskLevelValue) scamRiskLevelValue.textContent = result.scam_risk_level || ''
   if (scamRiskScoreValue) scamRiskScoreValue.textContent = `${result.scam_risk_score}/100`
   if (recommendationHeadline) recommendationHeadline.textContent = result.recommendation || ''
-  if (explanationText) explanationText.textContent = mapRecommendationSummary(result.recommendation)
-  if (resumeMatchValue) resumeMatchValue.textContent = `${Number(result.resume_match_score).toFixed(2)}%`
+  if (explanationText) explanationText.textContent = mapRecommendationSummary(result)
+  if (resumeMatchValue) {
+  resumeMatchValue.textContent = result.resume_input_valid === false
+    ? 'Insufficient Data'
+    : `${Number(result.resume_match_score).toFixed(2)}%`
+}
   if (opportunityScoreValue) opportunityScoreValue.textContent = `${Number(result.opportunity_score).toFixed(2)}/100`
 
   const riskPercent = Math.min(100, Math.max(0, result.scam_risk_score || 0))
@@ -220,39 +250,122 @@ function updateSkills(result) {
 function updateAdvice(result) {
   let advisorTextValue = ''
   const recommendationText = String(result.recommendation || '').toLowerCase()
-  const flagLabels = Array.isArray(result.red_flags)
-    ? result.red_flags.slice(0, 3).map(flag => flag.title.toLowerCase()).join(', ')
-    : ''
 
-  if (recommendationText.includes('avoid')) {
-    advisorTextValue = flagLabels
-      ? `Avoid this opportunity. It contains serious warning signs such as ${flagLabels}. Apply only through verified company portals.`
-      : 'Avoid this opportunity. It contains warning signs. Apply only through verified company portals.'
+  if (recommendationText.includes('insufficient')) {
+    advisorTextValue =
+      'Career advice is unavailable because the job or resume information is not enough for analysis.'
+  } else if (result.resume_input_valid === false) {
+    advisorTextValue =
+      'CareerShield can check the job safety, but your resume does not contain enough meaningful information for personalized career advice.'
+  } else if (recommendationText.includes('avoid')) {
+    advisorTextValue =
+      'Avoid this opportunity. It contains serious warning signs. Apply only through verified company portals.'
   } else if (recommendationText.includes('caution')) {
-    advisorTextValue = 'Verify the company website, recruiter email, and job details before applying.'
+    advisorTextValue =
+      'Verify the company website, recruiter email, and job details before applying.'
   } else {
-    advisorTextValue = 'This opportunity appears safe based on available information. Still verify the company website before sharing personal documents.'
+    advisorTextValue =
+      'This opportunity appears safe based on available information. Still verify the company website before sharing personal documents.'
   }
 
   if (advisorText) advisorText.textContent = advisorTextValue
 }
-
 function updateImprovements(result) {
+  if (result.recommendation === 'Insufficient Data') {
+    if (improveText) {
+      improveText.innerHTML =
+        '<p>Add a complete job description and resume to receive improvement suggestions.</p>'
+    }
+    return
+  }
+
+  if (result.resume_input_valid === false) {
+    if (improveText) {
+      improveText.innerHTML =
+        '<p>Add a complete resume with skills, projects, education, and experience to receive personalized suggestions.</p>'
+    }
+    return
+  }
+
   const suggestions = []
+
   if (Array.isArray(result.missing_skills) && result.missing_skills.length > 0) {
     result.missing_skills.slice(0, 3).forEach(skill => {
       suggestions.push(`Learn or highlight ${skill} before applying.`)
     })
   }
+
   if (Number(result.resume_match_score) < 50) {
     suggestions.push('Your resume match is low. Customize your resume with relevant skills and project keywords.')
   }
+
   if (suggestions.length === 0) {
     suggestions.push('Your resume alignment is strong. Focus on verified company details and job quality.')
   }
+
   if (improveText) {
     improveText.innerHTML = suggestions.map(line => `<p>${line}</p>`).join('')
   }
+}
+
+function updateCareerIntelligence(result) {
+  const section = document.getElementById('careerIntelligenceSection')
+  if (!section) return
+
+  const verdict = document.getElementById('aiCareerVerdict')
+  const recruiter = document.getElementById('aiRecruiterView')
+  const readiness = document.getElementById('interviewReadinessScore')
+  const roadmapList = document.getElementById('skillRoadmapList')
+  const questionsList = document.getElementById('interviewQuestionsList')
+  const whySafeList = document.getElementById('aiWhySafeList')
+  const whyAttentionList = document.getElementById('aiWhyAttentionList')
+  const finalSummary = document.getElementById('aiFinalSummary')
+  section.classList.remove('hidden')
+
+  if (verdict) verdict.textContent = result.ai_career_verdict || 'No career verdict available.'
+  if (recruiter) recruiter.textContent = result.ai_recruiter_view || 'No recruiter view available.'
+  if (readiness) readiness.textContent = `${result.interview_readiness_score || 0}%`
+
+  if (roadmapList) {
+    roadmapList.innerHTML = ''
+    ;(result.skill_roadmap || []).forEach(item => {
+      const li = document.createElement('li')
+      li.textContent = item
+      roadmapList.appendChild(li)
+    })
+  }
+
+  if (questionsList) {
+    questionsList.innerHTML = ''
+    ;(result.likely_interview_questions || []).forEach(question => {
+      const li = document.createElement('li')
+      li.textContent = question
+      questionsList.appendChild(li)
+    })
+  }
+  const explanation = result.ai_explanation || {}
+
+if (whySafeList) {
+  whySafeList.innerHTML = ''
+  ;(explanation.why_safe || []).forEach(item => {
+    const li = document.createElement('li')
+    li.textContent = `✅ ${item}`
+    whySafeList.appendChild(li)
+  })
+}
+
+if (whyAttentionList) {
+  whyAttentionList.innerHTML = ''
+  ;(explanation.why_attention || []).forEach(item => {
+    const li = document.createElement('li')
+    li.textContent = `⚠️ ${item}`
+    whyAttentionList.appendChild(li)
+  })
+}
+
+if (finalSummary) {
+  finalSummary.textContent = explanation.final_summary || ''
+}
 }
 
 async function handleSubmit(event) {
@@ -278,6 +391,9 @@ async function handleSubmit(event) {
   }
 
   resetDashboardState()
+  if (runAnalysisBtn) {
+  runAnalysisBtn.textContent = 'Analyzing...'
+}
   if (dashboardSection) dashboardSection.classList.add('hidden')
 
   console.log('Sending generate-report payload:', payload)
@@ -297,12 +413,14 @@ async function handleSubmit(event) {
     }
 
     const result = await response.json()
+    latestAnalysisResult = result
     updateScores(result)
     updateRecommendationPanel(result)
     updateFlags(result)
     updateSkills(result)
     updateAdvice(result)
     updateImprovements(result)
+    updateCareerIntelligence(result)
 
     if (validationMessage) {
       validationMessage.textContent = ''
@@ -313,7 +431,7 @@ async function handleSubmit(event) {
     if (dashboardSection) {
       dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  } catch (error) {
+   } catch (error) {
     console.error('generate-report request failed:', error)
     if (validationMessage) {
       validationMessage.textContent = error instanceof TypeError
@@ -321,125 +439,242 @@ async function handleSubmit(event) {
         : String(error)
       validationMessage.hidden = false
     }
+  } finally {
+    if (runAnalysisBtn) {
+      runAnalysisBtn.textContent = 'Run Analysis'
+      runAnalysisBtn.disabled = false
+      runAnalysisBtn.classList.remove('loading')
+    }
   }
 }
-
 function handleDownloadReport() {
-  const getText = (id) => document.getElementById(id)?.textContent?.trim() || ''
-  const recommendation = getText('recommendationHeadline')
-  const trust = getText('trustScoreValue')
-  const scam = getText('scamRiskScoreValue')
-  const resumeMatch = getText('resumeMatchValue')
-  const oppScore = getText('opportunityScoreValue')
-  const advisor = getText('advisorText')
-
-  let improvements = ''
-  const improveEl = document.getElementById('improveText')
-  if (improveEl) {
-    const parts = Array.from(improveEl.querySelectorAll('p'))
-      .map(p => p.textContent.trim())
-      .filter(Boolean)
-    improvements = parts.join('\n') || improveEl.textContent.trim()
+  if (!latestAnalysisResult) {
+    alert('Please run an analysis first.')
+    return
   }
 
-  const rfContainer = document.getElementById('redFlagsContainer')
-  let redFlags = []
-  if (rfContainer) {
-    const cards = Array.from(rfContainer.querySelectorAll('.flag-card'))
-    if (cards.length === 0) {
-      const none = rfContainer.querySelector('.result-text')
-      if (none) redFlags = [none.textContent.trim()]
-    } else {
-      redFlags = cards.map(c => {
-        const title = c.querySelector('h5')?.textContent?.trim() || ''
-        const sev = c.querySelector('.severity')?.textContent?.trim() || ''
-        const reason = c.querySelector('p')?.textContent?.trim() || ''
-        return `${title}${sev ? ' [' + sev + ']' : ''}${reason ? ': ' + reason : ''}`
-      })
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF()
+  const result = latestAnalysisResult
+
+  const pageWidth = doc.internal.pageSize.getWidth()
+  const margin = 14
+  let y = 18
+
+  const checkPage = () => {
+    if (y > 268) {
+      doc.addPage()
+      y = 18
     }
   }
 
-  const matching = Array.from(document.getElementById('matchingSkills')?.querySelectorAll('.badge') || [])
-    .map(e => e.textContent.trim())
-    .filter(Boolean)
-  const missing = Array.from(document.getElementById('missingSkills')?.querySelectorAll('.badge') || [])
-    .map(e => e.textContent.trim())
-    .filter(Boolean)
-
-  const recText = (recommendation || '').toLowerCase()
-  let recColor = '#2ecc71'
-  if (recText.includes('avoid')) recColor = '#ff6b6b'
-  else if (recText.includes('caution')) recColor = '#ffcc66'
-
-  const title = 'CareerShield_Report'
-  const html = `<!doctype html>
-      <html>
-      <head>
-        <meta charset="utf-8" />
-        <title>${title}</title>
-        <style>
-          body{font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; color:#0b1220; margin:28px}
-          .header{display:flex;align-items:center;gap:12px}
-          .brand{font-weight:800;font-size:20px}
-          .accent{color:${recColor};font-weight:700}
-          .section{margin-top:18px}
-          h2{margin:6px 0 8px;font-size:16px}
-          .metric{display:flex;justify-content:space-between;padding:10px 12px;background:#f6f8fa;border-radius:8px;margin-bottom:8px}
-          .muted{color:#6b7280}
-          .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2f6;margin:6px 6px 0 0}
-          .red-flag{background:#fff3f3;border-left:4px solid #ff6b6b;padding:8px;border-radius:6px;margin-bottom:8px}
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <div class="brand">CareerShield <span class="accent">AI</span></div>
-        </div>
-        <div class="section">
-          <h2>Recommendation</h2>
-          <div class="metric"><strong style="color:${recColor}">${recommendation}</strong><span class="muted">${new Date().toLocaleString()}</span></div>
-        </div>
-        <div class="section">
-          <h2>Scores</h2>
-          <div class="metric"><span>Trust Score</span><strong>${trust}</strong></div>
-          <div class="metric"><span>Scam Risk Score</span><strong>${scam}</strong></div>
-          <div class="metric"><span>Resume Match</span><strong>${resumeMatch}</strong></div>
-          <div class="metric"><span>Opportunity Score</span><strong>${oppScore}</strong></div>
-        </div>
-        <div class="section">
-          <h2>Red Flags</h2>
-          ${redFlags.length ? redFlags.map(f => `<div class="red-flag">${f}</div>`).join('') : '<div class="muted">None detected.</div>'}
-        </div>
-        ${matching.length ? `<div class="section"><h2>Matching Skills</h2><div>${matching.map(s=>`<span class="badge">${s}</span>`).join('')}</div></div>` : ''}
-        ${missing.length ? `<div class="section"><h2>Missing Skills</h2><div>${missing.map(s=>`<span class="badge">${s}</span>`).join('')}</div></div>` : ''}
-        <div class="section">
-          <h2>AI Career Advisor</h2>
-          <div class="muted">${advisor}</div>
-        </div>
-        <div class="section">
-          <h2>Improvement Suggestions</h2>
-          <div class="muted">${improvements.split('\n').map(l=>`<div>${l}</div>`).join('')}</div>
-        </div>
-      </body>
-      </html>`
-
-  const win = window.open('', '_blank')
-  if (!win) {
-    const blob = new Blob([html], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'CareerShield_Report.html'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
-    return
+  const addSection = (title) => {
+    checkPage()
+    y += 5
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(13)
+    doc.setTextColor(24, 52, 105)
+    doc.text(title, margin, y)
+    y += 8
   }
-  win.document.open()
-  win.document.write(html)
-  win.document.close()
-  try { win.document.title = 'CareerShield_Report' } catch (e) {}
-  setTimeout(() => { try { win.focus(); win.print(); } catch (e) { /* ignore */ } }, 300)
+
+  const addText = (text) => {
+    checkPage()
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(10)
+    doc.setTextColor(55, 65, 80)
+    const lines = doc.splitTextToSize(String(text || ''), pageWidth - margin * 2)
+    doc.text(lines, margin, y)
+    y += lines.length * 5 + 3
+  }
+
+  const addBullet = (text) => {
+    checkPage()
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(10)
+    doc.setTextColor(55, 65, 80)
+    const lines = doc.splitTextToSize(`• ${text}`, pageWidth - margin * 2)
+    doc.text(lines, margin, y)
+    y += lines.length * 5 + 2
+  }
+
+  
+
+  const addRedFlag = (flag) => {
+    checkPage()
+    const severity = String(flag.severity || 'warning').toUpperCase()
+
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(9)
+    doc.setTextColor(210, 65, 65)
+    doc.text(severity, margin, y)
+    y += 5
+
+    doc.setFontSize(10)
+    doc.setTextColor(25, 35, 55)
+    doc.text(String(flag.title || 'Warning sign'), margin, y)
+    y += 5
+
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(55, 65, 80)
+    const reasonLines = doc.splitTextToSize(String(flag.reason || ''), pageWidth - margin * 2)
+    doc.text(reasonLines, margin, y)
+    y += reasonLines.length * 5 + 4
+
+    doc.setTextColor(95, 105, 120)
+    const whyLines = doc.splitTextToSize(
+      'Why it matters: Genuine companies usually do not ask for money, urgent payments, or unverifiable personal details before hiring.',
+      pageWidth - margin * 2
+    )
+    doc.text(whyLines, margin, y)
+    y += whyLines.length * 5 + 5
+  }
+
+  // Header
+  doc.setFillColor(12, 18, 32)
+  doc.rect(0, 0, pageWidth, 34, 'F')
+
+  doc.setTextColor(255, 255, 255)
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(18)
+  doc.text('CareerShield AI', margin, 18)
+
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'normal')
+  doc.text('AI Job Opportunity Report', margin, 26)
+
+  y = 46
+
+  const verdict = result.recommendation || 'N/A'
+  const scamRisk = Number(result.scam_risk_score || 0)
+  const resumeMatch = Number(result.resume_match_score || 0)
+  const opportunityScore = Number(result.opportunity_score || 0)
+  const readinessScore = Number(result.interview_readiness_score || 0)
+
+  let verdictColor = [46, 204, 113]
+  if (String(verdict).toLowerCase().includes('avoid') || scamRisk >= 70) {
+    verdictColor = [231, 76, 60]
+  } else if (String(verdict).toLowerCase().includes('caution') || scamRisk >= 35) {
+    verdictColor = [243, 156, 18]
+  }
+
+  // Recommendation Box
+  doc.setFillColor(245, 248, 252)
+  doc.roundedRect(margin, y, pageWidth - margin * 2, 64, 5, 5, 'F')
+
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(13)
+  doc.setTextColor(20, 30, 50)
+  doc.text('Final Recommendation', margin + 6, y + 11)
+
+  doc.setFontSize(20)
+  doc.setTextColor(...verdictColor)
+  doc.text(verdict.toUpperCase(), margin + 6, y + 29)
+
+  doc.setFontSize(10)
+  doc.setTextColor(55, 65, 80)
+  doc.text(`Opportunity Score: ${opportunityScore.toFixed(2)}/100`, margin + 6, y + 43)
+  doc.text(`Scam Risk: ${result.scam_risk_level || 'Low'}`, margin + 6, y + 54)
+  doc.text(`Resume Match: ${resumeMatch.toFixed(2)}%`, margin + 74, y + 54)
+  doc.text(`Interview Readiness: ${readinessScore}%`, margin + 138, y + 54)
+
+  y += 76
+
+  addSection('Key Reasons Behind This Recommendation')
+
+  const safePoints = result.ai_explanation?.why_safe || []
+  const attentionPoints = result.ai_explanation?.why_attention || []
+
+  if (safePoints.length) {
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(10)
+    doc.setTextColor(35,120,80)
+    doc.text("What's Good", margin, y)
+    y += 6
+
+    safePoints.slice(0,4).forEach(item => {
+        addBullet(item)
+    })
+}
+
+  if (attentionPoints.length) {
+    y += 2
+
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(10)
+    doc.setTextColor(190,120,30)
+    doc.text("Before You Apply", margin, y)
+    y += 6
+
+    attentionPoints.slice(0,4).forEach(item=>{
+        addBullet(item)
+    })
+}
+
+  addSection("Career Insights")
+  addText(result.ai_recruiter_view || result.ai_career_verdict || 'No career advice available.')
+
+  addSection('Skills You Already Have')
+  const matching = result.matching_skills || []
+  if (matching.length) {
+    matching.slice(0,10).forEach(skill=>{
+    addBullet(skill)
+})
+  } else {
+    addText('No matching skills detected.')
+  }
+
+  addSection('Skills That Can Improve Your Chances')
+  const missing = result.missing_skills || []
+  if (missing.length) {
+    missing.slice(0,8).forEach(skill=>{
+    addBullet(skill)
+})
+  } else {
+    addText('No major missing skills detected.')
+  }
+
+  addSection('Next Steps')
+  const roadmap = result.skill_roadmap || []
+  if (roadmap.length) {
+    roadmap.slice(0, 5).forEach(item => addBullet(item))
+  } else {
+    addBullet('Verify the company website before applying.')
+    addBullet('Apply only through official company portals.')
+    addBullet('Never pay registration or processing fees.')
+  }
+
+  addSection('Possible Interview Questions')
+  const questions = result.likely_interview_questions || []
+  if (questions.length) {
+    questions.slice(0, 5).forEach(q => addBullet(q))
+  } else {
+    addText('No interview questions generated.')
+  }
+
+  addSection('Warning Signs Detected')
+  if (Array.isArray(result.red_flags) && result.red_flags.length > 0) {
+    result.red_flags.forEach(flag => addRedFlag(flag))
+  } else {
+    addText('No major warning signs were detected.')
+  }
+
+  addSection('Safety Checklist Before Applying')
+  addBullet('Verify the company website and recruiter identity.')
+addBullet('Apply only through official company portals.')
+addBullet('Never pay money for an interview, offer letter, or onboarding.')
+addBullet('Never share OTP, bank details, or sensitive documents before verification.')
+
+  addSection('Disclaimer')
+  addText(
+    'This report is automatically generated by CareerShield AI to help job seekers identify recruitment scams and prepare better for genuine opportunities. It is advisory and should be used along with personal verification.'
+  )
+
+  doc.setFontSize(8)
+  doc.setTextColor(120, 120, 120)
+  doc.text(`Generated by CareerShield AI on ${new Date().toLocaleString()}`, margin, 287)
+
+  doc.save('CareerShield_AI_Report.pdf')
 }
 
 function initialize() {
@@ -447,6 +682,7 @@ function initialize() {
     console.warn('Analyze form not found')
     return
   }
+
   if (analyzeBtn) {
     analyzeBtn.type = 'button'
     analyzeBtn.addEventListener('click', (e) => {
@@ -454,6 +690,7 @@ function initialize() {
       openModal('header')
     })
   }
+
   if (heroAnalyze) {
     heroAnalyze.type = 'button'
     heroAnalyze.addEventListener('click', (e) => {
@@ -461,6 +698,7 @@ function initialize() {
       openModal('hero')
     })
   }
+
   if (closeModalBtn) {
     closeModalBtn.type = 'button'
     closeModalBtn.addEventListener('click', (e) => {
@@ -468,6 +706,7 @@ function initialize() {
       closeModal(false)
     })
   }
+
   if (cancelBtn) {
     cancelBtn.type = 'button'
     cancelBtn.addEventListener('click', (e) => {
@@ -475,14 +714,17 @@ function initialize() {
       closeModal(false)
     })
   }
+
   if (backdrop) {
     backdrop.addEventListener('click', () => closeModal(false))
   }
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal?.getAttribute('aria-hidden') === 'false') {
       closeModal(false)
     }
   })
+
   form.addEventListener('submit', handleSubmit)
 
   const downloadBtn = document.getElementById('downloadReportBtn')
