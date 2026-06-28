@@ -2,14 +2,25 @@
 
 <div align="center">
 
-## **Know Before You Apply.**
+# **Know Before You Apply.**
 
-AI-powered recruitment scam detection, resume analysis, and career intelligence platform built using **FastAPI**, **Machine Learning**, and **NLP**.
+### AI-Powered Recruitment Scam Detection & Career Intelligence Platform
+
+CareerShield AI helps students and job seekers identify recruitment scams, evaluate job opportunities, analyze resume-job compatibility, and receive AI-powered career insights before applying.
+
+---
+
+### 🌐 Live Demo
+
+https://careershield-ai.netlify.app/
+
+---
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge\&logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge\&logo=fastapi)
 ![Machine Learning](https://img.shields.io/badge/Machine%20Learning-TF--IDF%20+%205%20Models-orange?style=for-the-badge)
 ![Scikit Learn](https://img.shields.io/badge/Scikit--Learn-Enabled-F7931E?style=for-the-badge\&logo=scikitlearn)
+![Deployment](https://img.shields.io/badge/Deployment-Netlify%20%7C%20Render-success?style=for-the-badge)
 
 </div>
 
@@ -17,54 +28,91 @@ AI-powered recruitment scam detection, resume analysis, and career intelligence 
 
 # 📸 Screenshots
 
-## Home
+## 🏠 Home Dashboard
 
-![Home Dashboard](assets/dashboard1.png)
+![Home](assets/dashboard1.png)
 
 ---
 
-## Analysis Dashboard
+## 📊 Analysis Dashboard
 
-![Analysis Dashboard](assets/analysis1.png)
+![Analysis](assets/analysis1.png)
 
-### Detailed AI Analysis
+---
 
-![Detailed AI Analysis](assets/analysis2.png)
+## 🤖 AI Career Intelligence
+
+![AI Analysis](assets/analysis2.png)
+
+---
+
+# 🎯 Problem Statement
+
+Every year, thousands of students and fresh graduates fall victim to fake internships, fraudulent recruiters, registration fee scams, and misleading job offers.
+
+CareerShield AI acts as an AI-powered verification layer that analyzes job opportunities before candidates apply, helping them make safer and smarter career decisions.
 
 ---
 
 # 🚀 Overview
 
-CareerShield AI helps students and job seekers evaluate job opportunities before applying.
+CareerShield AI is a full-stack AI-powered career intelligence platform that combines **Machine Learning**, **Natural Language Processing**, and a **Hybrid Rule-Based Detection Engine** to evaluate recruitment opportunities.
 
-The platform combines **Machine Learning**, **Rule-Based Scam Detection**, **Resume Matching**, and **Career Intelligence** to identify fraudulent opportunities and provide actionable career insights.
+Instead of relying only on job descriptions, the platform intelligently analyzes recruiter messages, salary claims, company information, resume alignment, and scam indicators to generate actionable career insights.
 
----
+The system provides:
 
-# ✨ Features
-
-### 🛡️ Recruitment Scam Detection
-
-* Detects registration fee scams
-* Upfront payment requests
-* Free email providers
-* Unrealistic salary offers
-* Work-from-home scam patterns
-* Immediate joining pressure
-* Missing company information
-* Vague job descriptions
+* Recruitment Scam Detection
+* Resume-Job Matching
+* Opportunity Scoring
+* Interview Readiness
+* AI Career Verdict
+* Recruiter's Perspective
+* Personalized Skill Roadmap
+* Downloadable Analysis Reports
 
 ---
 
-### 🤖 Hybrid Scam Analysis
+# ⭐ Key Highlights
+
+* ✅ Hybrid Rule-Based + Machine Learning Scam Detection
+* ✅ TF-IDF based NLP Pipeline
+* ✅ Evaluated 5 Machine Learning Models
+* ✅ Resume-Job Skill Matching
+* ✅ AI Career Intelligence Dashboard
+* ✅ Interview Readiness Estimation
+* ✅ Personalized Skill Roadmap
+* ✅ Downloadable PDF Reports
+* ✅ Fully Deployed (Netlify + Render)
+
+---
+
+# 🛡️ Core Modules
+
+## 🛡️ Recruitment Scam Detection
+
+Detects:
+
+* Registration Fee Scams
+* Upfront Payment Requests
+* Fake Recruiter Emails
+* Unrealistic Salary Offers
+* Work-from-Home Scam Patterns
+* Immediate Joining Pressure
+* Missing Company Information
+* Vague Job Descriptions
+
+---
+
+## 🤖 Hybrid Scam Analysis
 
 Combines:
 
 * Rule-Based Detection Engine
-* TF-IDF Text Representation
+* TF-IDF NLP Pipeline
 * Machine Learning Classification
 
-Outputs:
+Generates:
 
 * Trust Score
 * Scam Risk Score
@@ -73,16 +121,18 @@ Outputs:
 
 ---
 
-### 📄 Resume Intelligence
+## 📄 Resume Intelligence
 
-* Resume–Job Match Score
+Analyzes:
+
+* Resume Match Score
 * Matching Skills
 * Missing Skills
-* Skill Gap Analysis
+* Resume Gap Analysis
 
 ---
 
-### 💼 AI Career Intelligence
+## 💼 AI Career Intelligence
 
 Generates:
 
@@ -91,64 +141,79 @@ Generates:
 * Interview Readiness Score
 * Personalized Skill Roadmap
 * Likely Interview Questions
+* AI Reasoning & Explanation
 
 ---
 
-### 📊 Interactive Dashboard
+## 📊 Interactive Dashboard
 
 Displays:
 
 * Scam Analysis
 * Resume Analysis
 * Opportunity Score
-* Career Insights
+* Career Intelligence
 * AI Explanation
 * Model Summary
+* PDF Download
 
 ---
 
 # ⚙️ System Workflow
 
 ```text
-                 Job Description
-                        │
-                        ▼
-          Rule-Based Scam Detection
-                        │
-                        ▼
-             Machine Learning Model
-        (TF-IDF + Best Selected Classifier)
-                        │
-                        ▼
-              Hybrid Scam Analysis
-                        │
-                        ▼
- Resume ─────────► Resume Matching
-                        │
-                        ▼
-              Career Intelligence
-                        │
-         ├── Career Verdict
-         ├── Recruiter's View
-         ├── Skill Roadmap
-         ├── Interview Questions
-         └── Readiness Score
-                        │
-                        ▼
-              Interactive Dashboard
+                   Job Description
+                           │
+                           ▼
+              Text Preprocessing (NLP)
+                           │
+                           ▼
+                Rule-Based Scam Detection
+                           │
+                           ▼
+             TF-IDF Feature Extraction (NLP)
+                           │
+                           ▼
+            Machine Learning Classification
+                           │
+                           ▼
+                 Hybrid Scam Analysis
+                           │
+ Resume ─────────────► Skill Extraction (NLP)
+                           │
+                           ▼
+                Resume-Job Matching
+                           │
+                           ▼
+              AI Career Intelligence
+                           │
+        ├── Career Verdict
+        ├── Recruiter's Perspective
+        ├── Skill Roadmap
+        ├── Interview Questions
+        ├── Readiness Score
+        └── AI Explanation
+                           │
+                           ▼
+             Interactive Dashboard
+                           │
+                           ▼
+                Download PDF Report
 ```
 
 ---
 
 # 🛠️ Tech Stack
 
-| Category         | Technologies                                                                                         |
-| ---------------- | ---------------------------------------------------------------------------------------------------- |
-| Frontend         | HTML5, CSS3, JavaScript                                                                              |
-| Backend          | Python, FastAPI, Uvicorn                                                                             |
-| Machine Learning | Scikit-learn, TF-IDF, Logistic Regression, Linear SVM, Random Forest, Gradient Boosting, Naive Bayes |
-| NLP              | TF-IDF, Skill Extraction                                                                             |
-| Version Control  | Git, GitHub                                                                                          |
+| Layer            | Technologies                                                                                 |
+| ---------------- | -------------------------------------------------------------------------------------------- |
+| Frontend         | HTML5, CSS3, JavaScript                                                                      |
+| Backend          | Python, FastAPI, Uvicorn                                                                     |
+| Machine Learning | Scikit-Learn, Logistic Regression, Linear SVM, Random Forest, Gradient Boosting, Naive Bayes |
+| NLP              | TF-IDF, Text Preprocessing, Regex, Keyword Extraction, Skill Extraction                      |
+| Reporting        | ReportLab                                                                                    |
+| Deployment       | Netlify, Render                                                                              |
+| Version Control  | Git, GitHub                                                                                  |
 
 ---
 
@@ -180,14 +245,14 @@ CareerShield-AI/
 
 # 🚀 Getting Started
 
-### Clone Repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/nishthagupta25/CareerShield-AI.git
 cd CareerShield-AI
 ```
 
-### Backend
+## Backend Setup
 
 ```bash
 cd backend
@@ -207,37 +272,38 @@ Backend:
 http://127.0.0.1:8000
 ```
 
-Swagger Docs:
+Swagger:
 
 ```
 http://127.0.0.1:8000/docs
 ```
 
-Open `frontend/index.html` using Live Server.
+Run the frontend using Live Server.
 
 ---
 
 # 📡 API Endpoints
 
-| Method | Endpoint           | Description              |
-| ------ | ------------------ | ------------------------ |
-| POST   | `/analyze-job`     | Scam Detection           |
-| POST   | `/analyze-resume`  | Resume Matching          |
-| POST   | `/generate-report` | Complete Career Analysis |
-| GET    | `/health`          | Health Check             |
+| Method | Endpoint           | Description                         |
+| ------ | ------------------ | ----------------------------------- |
+| POST   | `/analyze-job`     | Scam Detection                      |
+| POST   | `/analyze-resume`  | Resume Matching                     |
+| POST   | `/generate-report` | Complete Career Intelligence Report |
+| GET    | `/health`          | Health Check                        |
 
 ---
 
-# 🔮 Future Improvements
+# 🔮 Roadmap
 
 * Resume PDF Parsing
-* Company Verification
 * LinkedIn Job Analysis
+* Company Verification Engine
 * Authentication
 * User Dashboard
 * Analysis History
-* Cloud Deployment
 * LLM-powered Career Coach
+* Semantic Resume Matching
+* Company Reputation Score
 
 ---
 
@@ -249,8 +315,8 @@ Open `frontend/index.html` using Live Server.
 
 <div align="center">
 
-### ⭐ If you found this project useful, consider starring the repository.
-
-**Know Before You Apply.**
+⭐ If you found this project interesting, consider giving it a star.
 
 </div>
+
+**Know Before You Apply**
