@@ -398,7 +398,7 @@ async function handleSubmit(event) {
 
   console.log('Sending generate-report payload:', payload)
   try {
-    const response = await fetch('http://127.0.0.1:8000/generate-report', {
+    const response = await fetch('https://careershield-ai-78x0.onrender.com/generate-report', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
