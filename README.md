@@ -19,7 +19,7 @@ AI-powered recruitment scam detection, resume analysis, and career intelligence 
 
 ## Home
 
-![Home Dashboard](assets/dashboard.png)
+![Home Dashboard](assets/dashboard1.png)
 
 ---
 
