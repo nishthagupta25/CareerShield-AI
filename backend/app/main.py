@@ -22,6 +22,7 @@ app = FastAPI(title="CareerShield AI Backend")
 origins = [
     "http://127.0.0.1:5500",
     "http://localhost:5500",
+     "https://lively-chaja-4677e8.netlify.app",
 ]
 
 app.add_middleware(
