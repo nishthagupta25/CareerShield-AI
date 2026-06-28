@@ -1,167 +1,163 @@
 # 🛡️ CareerShield AI
 
-### Detect Job Scams. Analyze Opportunities. Apply Smarter.
+<div align="center">
 
-CareerShield AI is an AI-powered job opportunity analysis platform that helps students and job seekers identify recruitment scams, evaluate job opportunities, analyze recruiter credibility, and understand resume-job alignment before applying.
+## **Know Before You Apply.**
 
----
+AI-powered recruitment scam detection, resume analysis, and career intelligence platform built using **FastAPI**, **Machine Learning**, and **NLP**.
 
-## 📸 Dashboard Preview
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge\&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge\&logo=fastapi)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-TF--IDF%20+%205%20Models-orange?style=for-the-badge)
+![Scikit Learn](https://img.shields.io/badge/Scikit--Learn-Enabled-F7931E?style=for-the-badge\&logo=scikitlearn)
 
-### Home Dashboard
-
-![Dashboard](assets/dashboard.png)
-
-### Analysis Results
-
-![Analysis](assets/analysis.png)
+</div>
 
 ---
 
-## 🚨 Why CareerShield AI?
+# 📸 Screenshots
 
-Every year, thousands of students and fresh graduates lose money, personal information, and valuable opportunities because of:
+## Home
 
-* Fake internships
-* Registration fee scams
-* Upfront payment frauds
-* Fake recruiter emails
-* Unrealistic salary promises
-* Work-from-home scams
-
-CareerShield AI acts as a first layer of verification before candidates apply.
+![Home Dashboard](assets/dashboard.png)
 
 ---
 
-## ✨ Key Features
+## Analysis Dashboard
 
-### 🔍 Scam Detection Engine
+![Analysis Dashboard](assets/analysis1.png)
 
-Detects common recruitment scam patterns such as:
+### Detailed AI Analysis
 
-* Registration fee requests
-* Upfront payment demands
+![Detailed AI Analysis](assets/analysis2.png)
+
+---
+
+# 🚀 Overview
+
+CareerShield AI helps students and job seekers evaluate job opportunities before applying.
+
+The platform combines **Machine Learning**, **Rule-Based Scam Detection**, **Resume Matching**, and **Career Intelligence** to identify fraudulent opportunities and provide actionable career insights.
+
+---
+
+# ✨ Features
+
+### 🛡️ Recruitment Scam Detection
+
+* Detects registration fee scams
+* Upfront payment requests
 * Free email providers
-* Suspicious salary claims
-* Vague job descriptions
-* Missing company information
+* Unrealistic salary offers
+* Work-from-home scam patterns
 * Immediate joining pressure
+* Missing company information
+* Vague job descriptions
 
-### 📊 Opportunity Intelligence
+---
 
-Generates:
+### 🤖 Hybrid Scam Analysis
+
+Combines:
+
+* Rule-Based Detection Engine
+* TF-IDF Text Representation
+* Machine Learning Classification
+
+Outputs:
 
 * Trust Score
 * Scam Risk Score
-* Resume Match Score
-* Opportunity Score
+* Scam Risk Level
+* Final Recommendation
 
-### 🎯 Skill Gap Analysis
+---
 
-Identifies:
+### 📄 Resume Intelligence
 
+* Resume–Job Match Score
 * Matching Skills
 * Missing Skills
-* Resume Gaps
-* Improvement Areas
-
-### 🤖 AI Career Advisor
-
-Provides:
-
-* Personalized recommendations
-* Risk explanations
-* Career guidance
-* Resume improvement suggestions
-
-### 📄 Professional PDF Reports
-
-Export detailed analysis reports containing:
-
-* Opportunity assessment
-* Risk analysis
-* Skill evaluation
-* Career recommendations
+* Skill Gap Analysis
 
 ---
 
-## 📈 Example Analysis
+### 💼 AI Career Intelligence
 
-### Input
+Generates:
 
-Recruiter Email:
-[recruiter@gmail.com](mailto:recruiter@gmail.com)
-
-Salary:
-₹95,000/month
-
-Recruiter Message:
-"Pay ₹499 registration fee to confirm your interview slot."
-
-### Output
-
-❌ Recommendation: Avoid
-
-⚠️ Scam Risk Score: 100/100
-
-🚩 Red Flags Detected:
-
-* Registration Fee Required
-* Free Email Provider
-* Suspicious Salary
-* Immediate Joining Pressure
+* AI Career Verdict
+* Recruiter's Perspective
+* Interview Readiness Score
+* Personalized Skill Roadmap
+* Likely Interview Questions
 
 ---
 
-## ⚙️ How It Works
+### 📊 Interactive Dashboard
+
+Displays:
+
+* Scam Analysis
+* Resume Analysis
+* Opportunity Score
+* Career Insights
+* AI Explanation
+* Model Summary
+
+---
+
+# ⚙️ System Workflow
 
 ```text
-User Input
-     │
-     ▼
-CareerShield Analysis Engine
-     ├── Scam Detection
-     ├── Resume Matching
-     ├── Skill Extraction
-     └── Opportunity Scoring
-     │
-     ▼
-AI Career Advisor
-     │
-     ▼
-Interactive Dashboard + PDF Report
+                 Job Description
+                        │
+                        ▼
+          Rule-Based Scam Detection
+                        │
+                        ▼
+             Machine Learning Model
+        (TF-IDF + Best Selected Classifier)
+                        │
+                        ▼
+              Hybrid Scam Analysis
+                        │
+                        ▼
+ Resume ─────────► Resume Matching
+                        │
+                        ▼
+              Career Intelligence
+                        │
+         ├── Career Verdict
+         ├── Recruiter's View
+         ├── Skill Roadmap
+         ├── Interview Questions
+         └── Readiness Score
+                        │
+                        ▼
+              Interactive Dashboard
 ```
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-### Frontend
-
-* HTML5
-* CSS3
-* Vanilla JavaScript
-
-### Backend
-
-* Python
-* FastAPI
-* Uvicorn
-
-### Reporting
-
-* ReportLab
+| Category         | Technologies                                                                                         |
+| ---------------- | ---------------------------------------------------------------------------------------------------- |
+| Frontend         | HTML5, CSS3, JavaScript                                                                              |
+| Backend          | Python, FastAPI, Uvicorn                                                                             |
+| Machine Learning | Scikit-learn, TF-IDF, Logistic Regression, Linear SVM, Random Forest, Gradient Boosting, Naive Bayes |
+| NLP              | TF-IDF, Skill Extraction                                                                             |
+| Version Control  | Git, GitHub                                                                                          |
 
 ---
 
-## 📁 Project Structure
+# 📂 Project Structure
 
 ```text
 CareerShield-AI/
-│
+
 ├── assets/
-│   ├── dashboard.png
-│   └── analysis.png
 │
 ├── frontend/
 │   ├── index.html
@@ -170,8 +166,9 @@ CareerShield-AI/
 │
 ├── backend/
 │   ├── app/
-│   │   ├── main.py
-│   │   └── services/
+│   │   ├── ml/
+│   │   ├── services/
+│   │   └── main.py
 │   │
 │   └── requirements.txt
 │
@@ -181,7 +178,7 @@ CareerShield-AI/
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Getting Started
 
 ### Clone Repository
 
@@ -190,7 +187,7 @@ git clone https://github.com/nishthagupta25/CareerShield-AI.git
 cd CareerShield-AI
 ```
 
-### Setup Backend
+### Backend
 
 ```bash
 cd backend
@@ -200,48 +197,60 @@ python -m venv venv
 venv\Scripts\activate
 
 pip install -r requirements.txt
-```
 
-### Run Backend
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-Backend runs at:
+Backend:
 
-```text
+```
 http://127.0.0.1:8000
 ```
 
-### Launch Frontend
+Swagger Docs:
 
-Open:
-
-```text
-frontend/index.html
+```
+http://127.0.0.1:8000/docs
 ```
 
-in your browser.
+Open `frontend/index.html` using Live Server.
 
 ---
 
-## 🚀 Future Enhancements (Version 2)
+# 📡 API Endpoints
 
-* ML-based scam classification
-* Company verification engine
-* Recruiter trust database
-* LinkedIn job analysis
-* Resume PDF parsing
-* Analysis history dashboard
-* NLP-powered resume parsing
+| Method | Endpoint           | Description              |
+| ------ | ------------------ | ------------------------ |
+| POST   | `/analyze-job`     | Scam Detection           |
+| POST   | `/analyze-resume`  | Resume Matching          |
+| POST   | `/generate-report` | Complete Career Analysis |
+| GET    | `/health`          | Health Check             |
 
 ---
 
-## 👩‍💻 Developer
+# 🔮 Future Improvements
+
+* Resume PDF Parsing
+* Company Verification
+* LinkedIn Job Analysis
+* Authentication
+* User Dashboard
+* Analysis History
+* Cloud Deployment
+* LLM-powered Career Coach
+
+---
+
+# 👩‍💻 Developer
 
 **Nishtha Gupta**
 
 ---
 
-> Every opportunity deserves verification before application.
+<div align="center">
+
+### ⭐ If you found this project useful, consider starring the repository.
+
+**Know Before You Apply.**
+
+</div>
