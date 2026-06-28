@@ -67,8 +67,6 @@ async def analyze_job(payload: AnalyzeRequest) -> Dict:
     scam_score = calculate_scam_risk(red_flags)
     scam_level = scam_risk_level(scam_score)
     recommendation = generate_final_recommendation(trust, scam_score)
-    if not resume_input_valid:
-      recommendation = "Needs Resume Review"
     explanation = generate_explanation(red_flags, trust, scam_score)
     return {
         "red_flags": red_flags,
